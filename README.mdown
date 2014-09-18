@@ -22,7 +22,7 @@ Or have a look at one of these screen casts:
 
 Installing git-flow
 -------------------
-See the Wiki for up-to-date [Installation Instructions](https://github.com/nvie/gitflow/wiki/Installation).
+See the Wiki for up-to-date [Installation Instructions](https://github.com/soboko/gitflow/wiki/Installation).
 
 
 Integration with your shell
@@ -107,7 +107,7 @@ The ``-d`` flag will accept all defaults.
 * To push/pull a feature branch to the remote repository, use:
 
   		git flow feature publish <name>
-		  git flow feature pull <remote> <name>
+		git flow feature pull <remote> <name>
 
 * To list/start/finish release branches, use:
   

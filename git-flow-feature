@@ -265,6 +265,7 @@ gerrit_push() {
 		echo "$err" | egrep '(error|!)' >&2
 		return 1
 	}
+	echo "$err"
 }
 
 cmd_start() {
@@ -308,7 +309,7 @@ cmd_start() {
 	echo ""
 	echo "     git flow feature submit $NAME"
 	echo ""
-	echo "If you want to colaborate on the feature, use:"
+	echo "If you want to collaborate on the feature, use:"
 	echo ""
 	echo "     git flow feature publish $NAME"
 	echo ""
@@ -722,12 +723,13 @@ require_feature_branch() {
 	first_feature_commit=$(git_get_first_feature_branch_commit "$1")
 	if [ -z "$first_feature_commit" ]; then
 		if ! git_is_commit_on_branch "$1" "$ORIGIN/$DEVELOP_BRANCH"; then
-			die "Current branch did NOT initially branch from '$ORIGIN/$DEVELOP_BRANCH'"
+			die "Current branch did NOT initially branch from '$ORIGIN/$DEVELOP_BRANCH'!"
 		fi
 	else
-		if [[ "`git rev-list $first_feature_commit^ ^"$ORIGIN/$DEVELOP_BRANCH" 2>&1 | wc -l`" != "0" \
+		wcl=`git rev-list $first_feature_commit^ ^"$ORIGIN/$DEVELOP_BRANCH" 2>&1 | wc -l`
+		if [[ ("$wcl" -lt "0" || "$wcl" -gt "0") \
 		   && "`git rev-parse $first_feature_commit^`" != "`git rev-parse $ORIGIN/$DEVELOP_BRANCH^`" ]]; then
-			die "Current branch did NOT initially branch from '$ORIGIN/$DEVELOP_BRANCH'"
+			die "Current branch did NOT initially branch from '$ORIGIN/$DEVELOP_BRANCH'!!"
 		fi
 	fi
 }
@@ -971,7 +973,7 @@ cmd_submit() {
 	change_id=$(echo "$change_info" | gerrit_query_filter id)
 	echo
 	echo "Summary of actions:"
-	echo "- All commits on you feature branch were squashed into one,"
+	echo "- All commits on your feature branch were squashed into one,"
 	echo "  and the resulting commit was pushed to Gerrit for review:"
 	echo "      Commit:     $(git log -1 --no-color --pretty="format:(%h..) %s" "${detached_head}")"
 	echo "      Change-Id:  ${change_id}"
